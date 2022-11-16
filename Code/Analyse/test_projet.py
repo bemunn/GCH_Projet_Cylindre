@@ -4,6 +4,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import sys
+
+
+sys.path.append('../Fonctions')
 
 try:
     from projet_fct import *
@@ -76,7 +80,7 @@ ax4.set_title("Champ de vitesse d'un fluide en écoulement autour\nd'un cylindre
 ax4.set_xlabel(r'Position en $x$ [-]', size=13)
 ax4.set_ylabel(r'Position en $y$ [-]', size=13)
 ax4.axis([-5.1, 5.1, -5.1, 5.1])
-# fig4.savefig("champ_de_vitesse.png", dpi=900)
+fig4.savefig("champ_de_vitesse.png", dpi=900)
 
 
-plt.show
+plt.show()
