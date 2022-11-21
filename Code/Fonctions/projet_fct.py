@@ -311,9 +311,9 @@ def coeff_aerodynamique(v_r, v_theta, nr, ntheta, prm):
     """ 
     r,theta_mat = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
     
-    theta = theta_mat[:,0]
+    theta = np.flip(theta_mat[:,0])
     
-    cp = coeff_pression(v_r[:,0], v_theta[:,0], prm)
+    cp = np.flip(coeff_pression(v_r[:,0], v_theta[:,0], prm))
     
     cd = -0.5 * trapeze(theta, cp * np.cos(theta))
     
