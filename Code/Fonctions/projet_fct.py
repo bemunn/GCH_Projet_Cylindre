@@ -227,9 +227,6 @@ def polaire2xy(v_r, v_theta, nr,ntheta, prm):
 
     for i in range(nr):
         for j in range(ntheta):
-                #v_x[-j-1, i], v_y[-1-j, i] = np.matmul([[np.cos(theta[-1-j,i]),np.sin(theta[-1-j,i])],[-np.sin(theta[-1-j,i]),np.cos(theta[-1-j,i])]], [v_r[-j-1, i],v_theta[-j-1,i] ])
-                v_x[-j-1, i] = v_r[-j-1, i] * np.cos(theta[-j-1, i]) + v_theta[-1-j, i] * np.cos(theta[-j-1, i] + np.pi/2)
-                v_y[-j-1, i] = v_r[-j-1, i] * np.sin(theta[-j-1, i]) + v_theta[-1-j, i] * np.sin(theta[-j-1, i] + np.pi/2)
-
+                v_x[-j-1, i], v_y[-1-j, i] = np.matmul([[np.cos(theta[-1-j,i]),-np.sin(theta[-1-j,i])],[np.sin(theta[-1-j,i]),np.cos(theta[-1-j,i])]], [v_r[-j-1, i],v_theta[-j-1,i] ])
 
     return v_x, v_y
