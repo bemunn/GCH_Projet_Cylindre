@@ -51,6 +51,13 @@ print(erreur_moy)
 
 vr, vtheta = vitesse_polaire(psi_num,nr,ntheta, prm )
 
+vr_exact = prm.U_inf*np.cos(theta)*(1-prm.R**2/r**2)
+vtheta_exact = -np.sin(theta)*prm.U_inf*(1+prm.R**2/r**2)
+
+erreur_vr = np.mean(abs(vr_exact - vr))
+erreur_vtheta = np.mean(abs(vtheta_exact - vtheta))
+
+
 cd, cl = coeff_aerodynamique(vr, vtheta, nr, ntheta, prm)
 
 V = np.sqrt(np.square(vr) + np.square(vtheta))
