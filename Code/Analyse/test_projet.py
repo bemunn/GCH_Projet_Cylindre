@@ -26,7 +26,7 @@ except:
 
 class parametres():
     U_inf = 1       # Vitesse du fluide éloigné du cylindre [-]
-    R     = 1       #Rayon interne du cylindre creux [-]
+    R     = 1       # Rayon interne du cylindre creux [-]
     R_ext = 5       # Rayon externe du cylindre creux [-]   
 
 prm = parametres()
