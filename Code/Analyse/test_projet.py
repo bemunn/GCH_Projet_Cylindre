@@ -31,8 +31,8 @@ class parametres():
 
 prm = parametres()
 
-nr = 151
-ntheta = 151
+nr = 101
+ntheta = 101
 
 psi_num = mdf_assemblage(nr,ntheta, prm)
 
@@ -67,13 +67,13 @@ x = r * np.cos(theta)
 y = r* np.sin(theta)
 
 
-fig, ax1 = plt.subplots(constrained_layout=True)
+# fig, ax1 = plt.subplots(constrained_layout=True)
 
-fig11 = ax1.pcolormesh(x,y, vx)
+# fig11 = ax1.pcolormesh(x,y, vx)
 
 
-fig2, ax2 = plt.subplots(constrained_layout=True)
-fig12 = ax2.pcolormesh(x,y, vy)
+# fig2, ax2 = plt.subplots(constrained_layout=True)
+# fig12 = ax2.pcolormesh(x,y, vy)
 
 
 circle1 = plt.Circle((0, 0), 1, color='white', fill=1)
@@ -90,10 +90,20 @@ ax4.set_xlabel(r'Position en $x$ [-]', size=13)
 ax4.set_ylabel(r'Position en $y$ [-]', size=13)
 ax4.axis([-5.1, 5.1, -5.1, 5.1])
 fig4.savefig("champ_de_vitesse.png", dpi=900)
-
+#%%
 psi_num_mat = np.abs(k2ij_matrix(ntheta, psi_num))
-fig22, ax22 = plt.subplots(constrained_layout=True)
-ax22.contourf(x, y, psi_num_mat, 1000)
-fig22.savefig("ligne_courant.png", dpi=1200)
+fig22, ax22 = plt.subplots(constrained_layout=False)
+contour = ax22.contourf(x, y, psi_num_mat, 15, cmap='plasma')
+cbar =plt.colorbar(contour, ax=ax22)
+cbar.set_label(r'$\psi$ ', rotation=0, labelpad=10, size=12)
+for key, spine in ax22.spines.items():
+    spine.set_visible(False)
+ax22.set_xlabel(r'Position en $x$ [-]', size=13)
+ax22.set_ylabel(r'Position en $y$ [-]', size=13)
+# ax22.grid(True, which="both")
+
+# fig22.savefig("ligne_courant.png", dpi=1200)
 
 plt.show()
+
+# %%

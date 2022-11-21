@@ -1,6 +1,7 @@
 # Importation des modules
 import numpy as np
 from scipy.sparse import csr_matrix
+from scipy.sparse import lil_matrix
 from scipy.sparse.linalg import spsolve
 
 def ij2k(i,j, ntheta):
@@ -116,7 +117,7 @@ def mdf_assemblage(nr,ntheta, prm):
     dr = abs(r[-1,-1] - r[-1,-2])
     dtheta = abs(theta[-1,-1] - theta[-2,-1])
 
-    A = csr_matrix((N,N)) 
+    A = lil_matrix((N,N)) 
     b = np.zeros(N)
 
     ## Fonction 
