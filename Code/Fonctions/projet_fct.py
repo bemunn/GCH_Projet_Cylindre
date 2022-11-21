@@ -94,7 +94,7 @@ def mdf_assemblage(nr,ntheta, prm):
     dr = abs(r[-1,-1] - r[-1,-2])
     dtheta = abs(theta[-1,-1] - theta[-2,-1])
 
-    A = np.zeros([N,N]) 
+    A = csr_matrix((N,N)) 
     b = np.zeros(N)
 
     ## Fonction 
@@ -139,7 +139,7 @@ def mdf_assemblage(nr,ntheta, prm):
         A[k,k] = 1
         b[k]   = prm.U_inf * prm.R_ext * (1 - prm.R**2 / prm.R_ext**2) * np.sin(theta[-1-j,i])
 
-    psi = np.linalg.solve(A,b)
+    psi = spsolve(A,b)
 
     return psi
 
@@ -173,15 +173,15 @@ def vitesse_polaire(psi,nr,ntheta, prm ):
     for i in range(nr):
         j = 0
         k = ij2k(i,j, ntheta)
-        v_r[-j-1, i] = (1 / r[-j-1, i]) * (-psi[k+2] + 4 * psi[k+1] - 3 * psi[k]) / (2 * dr)
+        v_r[-j-1, i] = (1 / r[-j-1, i]) * (-psi[k+2] + 4 * psi[k+1] - 3 * psi[k]) / (2 * dtheta)
 
         j = ntheta - 1
         k = ij2k(i,j, ntheta)
-        v_r[-j-1, i] = (1 / r[-j-1, i]) * (psi[k-2] - 4 * psi[k-1] + 3 * psi[k]) / (2 * dr)
+        v_r[-j-1, i] = (1 / r[-j-1, i]) * (psi[k-2] - 4 * psi[k-1] + 3 * psi[k]) / (2 * dtheta)
 
         for j in range(1, ntheta - 1):
             k = ij2k(i,j, ntheta)
-            v_r[-j-1, i] = (1 / r[-j-1, i]) * (psi[k+1] - psi[k-1]) / (2 * dr)
+            v_r[-j-1, i] = (1 / r[-j-1, i]) * (psi[k+1] - psi[k-1]) / (2 * dtheta)
 
 
     #v_theta
