@@ -26,7 +26,7 @@ except:
 
 class parametres():
     U_inf = 1       # Vitesse du fluide éloigné du cylindre [-]
-    R     = 1       #Rayon interne du cylindre creux [-]
+    R     = 1       # Rayon interne du cylindre creux [-]
     R_ext = 5       # Rayon externe du cylindre creux [-]   
 
 prm = parametres()
@@ -75,9 +75,9 @@ fig4, ax4 = plt.subplots(constrained_layout=True)
 ax4.add_patch(circle2)
 ax4.add_patch(circle1)
 # ax4.grid(True, which="both")
-bonds_r = 8
-bonds_theta = 1
-ax4.quiver(x[::bonds_theta,::bonds_r ], y[::bonds_theta , ::bonds_r], vx[::bonds_theta , ::bonds_r], vy[::bonds_theta , ::bonds_r], units = "dots", color = "red", scale = .01, label = "Vecteurs vitesse") 
+bonds_r = 16
+bonds_theta = 2
+ax4.quiver(x[::bonds_theta,::bonds_r ], y[::bonds_theta , ::bonds_r], vx[::bonds_theta , ::bonds_r], vy[::bonds_theta , ::bonds_r], units = "dots", color = "red", scale = .006, label = "Vecteurs vitesse") 
 ax4.set_title("Champ de vitesse d'un fluide en écoulement autour\nd'un cylindre en régime permanent", size=12)
 ax4.set_xlabel(r'Position en $x$ [-]', size=13)
 ax4.set_ylabel(r'Position en $y$ [-]', size=13)
