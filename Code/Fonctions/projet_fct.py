@@ -220,7 +220,7 @@ def polaire2xy(v_r, v_theta, nr,ntheta, prm):
         - v_y : Matrice (array) nr x ntheta contenant la vitesse selon l'axe y à chaque point [-]
     """
 
-    r,theta = position([prm.R, prm.R_ext],[0. , 2 * 1 * np.pi],nr,ntheta)
+    r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
 
     v_x = np.zeros([ntheta, nr])
     v_y = np.zeros([ntheta, nr])
