@@ -32,7 +32,7 @@ prm = parametres()
 
 
 
-nr = np.arange(11,62,10)
+nr = np.arange(11,112,10)
 erreur_moy = np.zeros(len(nr))
 
 
@@ -50,7 +50,7 @@ for a,n in enumerate(nr):
     erreur_moy[a] = np.mean(abs(psi_exact - psi_num))
     
     
-ordre = np.log10(abs(erreur_moy[-1]-erreur_moy[0]))/np.log10(abs(nr[-1]-nr[0]))  
+ordre =abs(np.log10(erreur_moy[-1])-np.log10(erreur_moy[0]))/abs(np.log10(nr[-1])-np.log10(nr[0]))  
 plt.loglog(nr,erreur_moy,'-r')
 plt.title(r'Erreur sur la valeur de $\psi$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
 plt.xlabel('N')
