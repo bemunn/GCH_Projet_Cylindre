@@ -36,6 +36,29 @@ def k2ij(k, ntheta):
 
     return i,j
 
+def k2ij_matrix(ntheta, vect):
+    """ Fonction convertissant le système à deux indices i,j en système un indice unique k
+
+    Entrées:
+        - k : Indice unique indiquant la position dans le domaine étudié
+        - ntheta : Discrétisation de l'espace en theta (nombre de points)
+        - vect : vecteur indexé à l'aide de k
+
+    Sorties:
+        - mat : Matrice indexé en [i,j] tel que k = ny * i + j
+    """
+    k_max = len(vect) - 1
+    i_max, j_max = k2ij(k_max, ntheta)
+
+    mat = np.zeros([j_max+1,i_max+1])
+
+    for k in range(len(vect)):
+        i, j  = k2ij(k, ntheta)
+
+        mat[-j-1, i] = vect[k]
+
+    return mat
+
 def position(X,Y,nx,ny):
     """ Fonction générant deux matrices de discrétisation de l'espace
 

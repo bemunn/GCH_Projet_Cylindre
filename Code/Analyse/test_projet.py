@@ -31,8 +31,8 @@ class parametres():
 
 prm = parametres()
 
-nr = 101
-ntheta = 81
+nr = 51
+ntheta = 61
 
 psi_num = mdf_assemblage(nr,ntheta, prm)
 
@@ -91,5 +91,8 @@ ax4.set_ylabel(r'Position en $y$ [-]', size=13)
 ax4.axis([-5.1, 5.1, -5.1, 5.1])
 fig4.savefig("champ_de_vitesse.png", dpi=900)
 
+psi_exact_mat = k2ij_matrix(ntheta, psi_exact)
+fig22, ax22 = plt.subplots(constrained_layout=True)
+ax22.contourf(x, y, psi_exact_mat, 1000)
 
 plt.show()
