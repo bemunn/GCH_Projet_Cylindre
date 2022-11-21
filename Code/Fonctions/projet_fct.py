@@ -54,7 +54,6 @@ def k2ij_matrix(ntheta, vect):
 
     for k in range(len(vect)):
         i, j  = k2ij(k, ntheta)
-
         mat[-j-1, i] = vect[k]
 
     return mat
