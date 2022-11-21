@@ -51,6 +51,8 @@ print(erreur_moy)
 
 vr, vtheta = vitesse_polaire(psi_num,nr,ntheta, prm )
 
+cd, cl = coeff_aerodynamique(vr, vtheta, nr, ntheta, prm)
+
 V = np.sqrt(np.square(vr) + np.square(vtheta))
 
 vx, vy = polaire2xy(vr, vtheta, nr,ntheta, prm)

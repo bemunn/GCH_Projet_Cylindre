@@ -230,3 +230,74 @@ def polaire2xy(v_r, v_theta, nr,ntheta, prm):
                 v_x[-j-1, i], v_y[-1-j, i] = np.matmul([[np.cos(theta[-1-j,i]),-np.sin(theta[-1-j,i])],[np.sin(theta[-1-j,i]),np.cos(theta[-1-j,i])]], [v_r[-j-1, i],v_theta[-j-1,i] ])
 
     return v_x, v_y
+
+def coeff_pression(v_r, v_theta, prm):
+    """ Fonction calculant le coefficient de pression Cp à partir des vecteurs vitesses
+
+    Entrées:
+        - v_r : Vecteur (array) ntheta contenant la vitesse selon l'axe r à chaque theta à r = R [-]
+        - v_theta : Vecteur (array) ntheta contenant la vitesse selon l'axe theta à chaque theta à r = R [-]
+        - prm : Objet class parametres()
+            - U_inf : Vitesse du fluide éloigné du cylindre [-]
+            - R : Rayon interne du cylindre creux [-]
+            - R_ext : Rayon externe du cylindre creux [-]
+
+    Sorties (dans l'ordre énuméré ci-bas):
+        - cp : Vecteur (array) ntheta contenant la vitesse selon l'axe x à chaque point [-]
+    """
+    
+    V = np.sqrt(v_r**2 + v_theta**2)
+    cp = 1 - (V/prm.U_inf)**2
+    
+    return cp
+
+def trapeze(x,y):
+    """Fonction qui calcule l'intégrale avec la méthode des trapèzes
+
+    Entrées:
+        - x : Valeurs de l'abscisse, vecteur (array)
+        - y : Valeurs de l'ordonnée, vecteur (array)
+
+    Sortie:
+        - Valeur de l'intégrale calculée (float)
+    """
+
+    # Fonction à écrire
+    S = 0
+    for i in range(int(len(x)) - 1):
+        S = S + 0.5 * (y[i] + y[i+1]) * (x[i+1] - x[i])
+
+    return S # à compléter
+
+def coeff_aerodynamique(v_r, v_theta, nr, ntheta, prm):
+    """Fonction qui calcule le coefficient de trainée et de portance avec les vitesses
+
+    Entrées:
+        - v_r : Matrice (array) nr x ntheta contenant la vitesse selon l'axe r à chaque point [-]
+        - v_theta : Matrice (array) nr x ntheta contenant la vitesse selon l'axe theta à chaque point [-]
+        - nr : Discrétisation de l'espace en r (nombre de points)
+        - ntheta : Discrétisation de l'espace en theta (nombre de points)
+        - prm : Objet class parametres()
+            - U_inf : Vitesse du fluide éloigné du cylindre [-]
+            - R : Rayon interne du cylindre creux [-]
+            - R_ext : Rayon externe du cylindre creux [-]
+
+    Sortie:
+        - cd : Valeur (double) du coefficient de trainée [-]
+        - cl : Valeur (double) du coefficient de portance [-]
+    """ 
+    r,theta_mat = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
+    
+    theta = theta_mat[:,0]
+    
+    cp = coeff_pression(v_r[:,0], v_theta[:,0], prm)
+    
+    cd = -0.5 * trapeze(theta, cp * np.cos(theta))
+    
+    cl = -0.5 * trapeze(theta, cp * np.sin(theta))
+    
+    return cd, cl
+    
+
+
+    
