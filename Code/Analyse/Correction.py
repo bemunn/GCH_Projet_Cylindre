@@ -85,9 +85,9 @@ class Test:
         r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
         psi_exact = np.zeros(nr*ntheta)
         for i in range(nr):
-            for j1 in range(ntheta):
-                k = ij2k(i,j1,ntheta)
-                psi_exact[k] = prm.U_inf * r[-1-j1,i] * np.sin(theta[-1-j1,i]) * (1 - prm.R**2 / r[-1-j1,i]**2)
+            for j in range(ntheta):
+                k = ij2k(i,j,ntheta)
+                psi_exact[k] = prm.U_inf * r[-1-j,i] * np.sin(theta[-1-j,i]) * (1 - prm.R**2 / r[-1-j,i]**2)
                 
         v_r, v_theta = vitesse_polaire(psi_exact,nr,ntheta, prm )
         v_x_exact = np.zeros([ntheta, nr])
@@ -108,25 +108,61 @@ class Test:
             assert(all(abs(vy[i,:] - v_y_exact[i,:]) < 1e-03))
             
     def test_coeff_pression(self):
-        nr = 51
-        ntheta = 76
+        nr = 411
+        ntheta = 411
         r_mat,theta_mat = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
         theta = theta_mat[:,0]
         r = prm.R
         psi_exact = np.zeros(nr*ntheta)
         for i in range(nr):
-            for j1 in range(ntheta):
-                k = ij2k(i,j1,ntheta)
-                psi_exact[k] = prm.U_inf * r_mat[-1-j1,i] * np.sin(theta_mat[-1-j1,i]) * (1 - prm.R**2 / r_mat[-1-j1,i]**2)   
+            for j in range(ntheta):
+                k = ij2k(i,j,ntheta)
+                psi_exact[k] = prm.U_inf * r_mat[-1-j,i] * np.sin(theta_mat[-1-j,i]) * (1 - prm.R**2 / r_mat[-1-j,i]**2)   
         v_r, v_theta = vitesse_polaire(psi_exact,nr,ntheta, prm)
          
         cp_exact = -1 + 2 * (np.cos(theta)**2 - np.sin(theta)**2)
         
-        cp = coeff_pression(v_r, v_theta, prm)
+        cp = coeff_pression(v_r[:,0], v_theta[:,0], prm)
         
         assert(len(cp) == ntheta)
         for i in range(0,ntheta):
             assert(all(abs(cp - cp_exact) < 1e-03))
+   
+    def test_trapeze(self):
+        v1 = np.array([0,2,4,5,6,10])
+        v2 = np.array([0,1,3,7,15,18,20])
+        t1 = np.linspace(0,(len(v1)-1)*2,len(v1))
+        t2 = np.linspace(0,(len(v2)-1)*3,len(v2))
+        pos1 = np.array([0,2,8,17,28,44])
+        pos2 = np.array([0.,1.5,7.5,22.5,55.5,105.,162.])
+        
+        rep_trapeze1 = trapeze(t1,v1)
+        rep_trapeze2 = trapeze(t2,v2)
+        
+        assert(abs(rep_trapeze1 - pos1[-1]) < 1e-02)
+        assert(abs(rep_trapeze2 - pos2[-1]) < 1e-02)          
+   
+    def test_coeff_aerodynamique(self):
+        nr = 411
+        ntheta = 411
+        r_mat,theta_mat = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
+        theta = theta_mat[:,0]
+        r = prm.R
+        psi_exact = np.zeros(nr*ntheta)
+        for i in range(nr):
+            for j in range(ntheta):
+                k = ij2k(i,j,ntheta)
+                psi_exact[k] = prm.U_inf * r_mat[-1-j,i] * np.sin(theta_mat[-1-j,i]) * (1 - prm.R**2 / r_mat[-1-j,i]**2) 
+                
+        v_r_mat, v_theta_mat = vitesse_polaire(psi_exact,nr,ntheta, prm)
+        cd, cl = coeff_aerodynamique(v_r_mat, v_theta_mat, nr, ntheta, prm)
+        cd_exact = 0
+        cl_exact = 0
+        assert(abs(cd - cd_exact) < 1e-05)
+        assert(abs(cl - cl_exact) < 1e-05)
+        
+  
+        
          
          
     
