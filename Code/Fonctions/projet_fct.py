@@ -118,6 +118,7 @@ def mdf_assemblage(nr,ntheta, prm):
     dtheta = abs(theta[-1,-1] - theta[-2,-1])
 
     A = lil_matrix((N,N)) 
+    # A = np.zeros([N,N])
     b = np.zeros(N)
 
     ## Fonction 
@@ -161,8 +162,10 @@ def mdf_assemblage(nr,ntheta, prm):
         k = ij2k(i,j, ntheta)
         A[k,k] = 1
         b[k]   = prm.U_inf * prm.R_ext * (1 - prm.R**2 / prm.R_ext**2) * np.sin(theta[-1-j,i])
-
+    
+    A = lil_matrix.tocsr(A)
     psi = spsolve(A,b)
+    # psi = np.linalg.solve(A,b)
 
     return psi
 
