@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import sys
+import pytest
+
 
 
 sys.path.append('../Fonctions')
@@ -50,7 +52,7 @@ erreur_moy = np.mean(abs(psi_exact - psi_num))
 print(erreur_moy)
 
 vr, vtheta = vitesse_polaire(psi_num,nr,ntheta, prm )
-
+ 
 vr_exact = prm.U_inf*np.cos(theta)*(1-prm.R**2/r**2)
 vtheta_exact = -np.sin(theta)*prm.U_inf*(1+prm.R**2/r**2)
 
@@ -107,3 +109,4 @@ ax22.set_ylabel(r'Position en $y$ [-]', size=13)
 plt.show()
 
 # %%
+pytest.main(['-q', '--tb=long', 'Correction.py'])
