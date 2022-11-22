@@ -58,11 +58,16 @@ class Test:
         
     def test_vitesse_polaire(self):
         nr = 201
-        ntheta = 221
+        ntheta = 201
         r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
         
-        psi_num = mdf_assemblage(nr,ntheta, prm)
-        vr, vtheta = vitesse_polaire(psi_num,nr,ntheta, prm )
+        psi_exact = np.zeros(nr*ntheta)
+        
+        for i in range(nr):
+            for j in range(ntheta):
+                k = ij2k(i,j,ntheta)
+                psi_exact[k] = prm.U_inf * r[-1-j,i] * np.sin(theta[-1-j,i]) * (1 - prm.R**2 / r[-1-j,i]**2)
+        vr, vtheta = vitesse_polaire(psi_exact,nr,ntheta, prm )
 
         vr_exact = prm.U_inf*np.cos(theta)*(1-prm.R**2/r**2)
         vtheta_exact = -np.sin(theta)*prm.U_inf*(1+prm.R**2/r**2)
@@ -74,3 +79,54 @@ class Test:
             assert(all(abs(vr[i,:] - vr_exact[i,:]) < 1e-03))
             assert(all(abs(vtheta[i,:] - vtheta_exact[i,:]) < 1e-03))
             
+    def test_polaire2xy(self):
+        nr = 51
+        ntheta = 76
+        r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
+        psi_exact = np.zeros(nr*ntheta)
+        for i in range(nr):
+            for j1 in range(ntheta):
+                k = ij2k(i,j1,ntheta)
+                psi_exact[k] = prm.U_inf * r[-1-j1,i] * np.sin(theta[-1-j1,i]) * (1 - prm.R**2 / r[-1-j1,i]**2)
+                
+        v_r, v_theta = vitesse_polaire(psi_exact,nr,ntheta, prm )
+        v_x_exact = np.zeros([ntheta, nr])
+        v_y_exact = np.zeros([ntheta, nr])
+
+        for i in range(nr):            
+            for j in range(ntheta):
+                    v_x_exact[-j-1, i] = v_r[-j-1, i] * np.cos(theta[-1-j,i]) + v_theta[-j-1,i] * np.cos(theta[-1-j,i] + np.pi/2)
+                    print(i)
+                    v_y_exact[-j-1, i] = v_r[-j-1, i] * np.sin(theta[-1-j,i]) + v_theta[-j-1,i] * np.sin(theta[-1-j,i] + np.pi/2)
+                    
+        vx, vy = polaire2xy(v_r, v_theta, nr,ntheta, prm)
+        
+        assert(np.asarray(vx).shape == (ntheta,nr))
+        assert(np.asarray(vy).shape == (ntheta,nr))
+        for i in range(0,ntheta):
+            assert(all(abs(vx[i,:] - v_x_exact[i,:]) < 1e-03))
+            assert(all(abs(vy[i,:] - v_y_exact[i,:]) < 1e-03))
+            
+    def test_coeff_pression(self):
+        nr = 51
+        ntheta = 76
+        r_mat,theta_mat = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
+        theta = theta_mat[:,0]
+        r = prm.R
+        psi_exact = np.zeros(nr*ntheta)
+        for i in range(nr):
+            for j1 in range(ntheta):
+                k = ij2k(i,j1,ntheta)
+                psi_exact[k] = prm.U_inf * r_mat[-1-j1,i] * np.sin(theta_mat[-1-j1,i]) * (1 - prm.R**2 / r_mat[-1-j1,i]**2)   
+        v_r, v_theta = vitesse_polaire(psi_exact,nr,ntheta, prm)
+         
+        cp_exact = -1 + 2 * (np.cos(theta)**2 - np.sin(theta)**2)
+        
+        cp = coeff_pression(v_r, v_theta, prm)
+        
+        assert(len(cp) == ntheta)
+        for i in range(0,ntheta):
+            assert(all(abs(cp - cp_exact) < 1e-03))
+         
+         
+    

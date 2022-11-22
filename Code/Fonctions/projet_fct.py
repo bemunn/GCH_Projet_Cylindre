@@ -254,7 +254,7 @@ def polaire2xy(v_r, v_theta, nr,ntheta, prm):
 
     return v_x, v_y
 
-def coeff_pression(v_r, v_theta, prm):
+def coeff_pression(v_r_mat, v_theta_mat, prm):
     """ Fonction calculant le coefficient de pression Cp à partir des vecteurs vitesses
 
     Entrées:
@@ -268,7 +268,8 @@ def coeff_pression(v_r, v_theta, prm):
     Sorties (dans l'ordre énuméré ci-bas):
         - cp : Vecteur (array) ntheta contenant la vitesse selon l'axe x à chaque point [-]
     """
-    
+    v_r = v_r_mat[:,0]
+    v_theta = v_theta_mat[:,0]
     V = np.sqrt(v_r**2 + v_theta**2)
     cp = 1 - (V/prm.U_inf)**2
     
