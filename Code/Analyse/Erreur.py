@@ -32,15 +32,17 @@ prm = parametres()
 
 
 
-nr = np.arange(11,112,10)
+nr = np.arange(11,152,10)
 erreur_moy = np.zeros(len(nr))
-
+erreur_moy_vr = np.zeros(len(nr))
+erreur_moy_vtheta = np.zeros(len(nr))
 
 
 for a,n in enumerate(nr):
     r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],n,n)
     psi_num = mdf_assemblage(n,n, prm)
     psi_exact = np.zeros(n**2)
+
     print(n)
     for i in range(n):
         for j in range(n):
@@ -48,9 +50,15 @@ for a,n in enumerate(nr):
             psi_exact[k] = prm.U_inf * r[-1-j,i] * np.sin(theta[-1-j,i]) * (1 - prm.R**2 / r[-1-j,i]**2)
             
     erreur_moy[a] = np.mean(abs(psi_exact - psi_num))
+    vr, vtheta = vitesse_polaire(psi_num,n,n, prm)
+    vr_exact = prm.U_inf*np.cos(theta)*(1-prm.R**2/r**2)
+    vtheta_exact = -np.sin(theta)*prm.U_inf*(1+prm.R**2/r**2)
+    erreur_moy_vr[a] = np.mean(abs(vr_exact - vr))
+    erreur_moy_vtheta[a] = np.mean(abs(vtheta_exact - vtheta))
     
-    
-ordre =abs(np.log10(erreur_moy[-1])-np.log10(erreur_moy[0]))/abs(np.log10(nr[-1])-np.log10(nr[0]))  
+ordre =abs(np.log10(erreur_moy[-1])-np.log10(erreur_moy[0]))/abs(np.log10(nr[-1])-np.log10(nr[0])) 
+ordre_vr =abs(np.log10(erreur_moy_vr[-1])-np.log10(erreur_moy_vr[0]))/abs(np.log10(nr[-1])-np.log10(nr[0]))
+ordre_vtheta =abs(np.log10(erreur_moy_vtheta[-1])-np.log10(erreur_moy_vtheta[0]))/abs(np.log10(nr[-1])-np.log10(nr[0])) 
 plt.loglog(nr,erreur_moy,'-r')
 plt.title(r'Erreur sur la valeur de $\psi$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
 plt.xlabel('N')

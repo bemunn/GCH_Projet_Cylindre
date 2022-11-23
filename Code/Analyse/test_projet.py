@@ -33,8 +33,8 @@ class parametres():
 
 prm = parametres()
 
-nr = 801
-ntheta = 801
+nr = 501
+ntheta = 501
 
 psi_num = mdf_assemblage(nr,ntheta, prm)
 
