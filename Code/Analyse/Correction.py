@@ -46,7 +46,7 @@ class Test:
         ntheta = 76
         r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
 
-        psi_num = mdf_assemblage(nr,ntheta, prm)
+        psi_num = mdf(nr,ntheta, prm)
         psi_exact = np.zeros(nr*ntheta)
         
         for i in range(nr):

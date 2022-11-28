@@ -40,7 +40,7 @@ erreur_moy_vtheta = np.zeros(len(nr))
 
 for a,n in enumerate(nr):
     r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],n,n)
-    psi_num = mdf_assemblage(n,n, prm)
+    psi_num = mdf(n,n, prm)
     psi_exact = np.zeros(n**2)
 
     print(n)

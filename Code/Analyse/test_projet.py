@@ -36,7 +36,7 @@ prm = parametres()
 nr = 501
 ntheta = 501
 
-psi_num = mdf_assemblage(nr,ntheta, prm)
+psi_num = mdf(nr,ntheta, prm)
 
 psi_exact = np.zeros(nr*ntheta)
 

@@ -93,8 +93,9 @@ def position(X,Y,nx,ny):
     return x, y
 
 
-def mdf_assemblage(nr,ntheta, prm):
-    """ Fonction assemblant la matrice A et le vecteur b
+def mdf(nr,ntheta, prm):
+    """ Fonction assemblant la matrice A et le vecteur b et résolvant 
+        pour psi à l'aide de matrices creuses
 
     Entrées:
         - nr : Discrétisation de l'espace en r (nombre de points)
@@ -105,8 +106,7 @@ def mdf_assemblage(nr,ntheta, prm):
             - R_ext : Rayon externe du cylindre creux [-]
 
     Sorties (dans l'ordre énuméré ci-bas):
-        - A : Matrice (array)
-        - b : Vecteur (array)
+        - psi : Vecteur (array)
     """
 
     # Fonction à écrire
