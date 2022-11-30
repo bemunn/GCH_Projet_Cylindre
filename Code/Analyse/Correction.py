@@ -120,7 +120,7 @@ class Test:
                 psi_exact[k] = prm.U_inf * r_mat[-1-j,i] * np.sin(theta_mat[-1-j,i]) * (1 - prm.R**2 / r_mat[-1-j,i]**2)   
         v_r, v_theta = vitesse_polaire(psi_exact,nr,ntheta, prm)
          
-        cp_exact = -1 + 2 * (np.cos(theta)**2 - np.sin(theta)**2)
+        cp_exact = 1 -4*np.sin(theta)**2
         
         cp = coeff_pression(v_r[:,0], v_theta[:,0], prm)
         

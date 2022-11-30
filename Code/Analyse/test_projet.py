@@ -2,6 +2,7 @@
 # import time
 
 import matplotlib.pyplot as plt
+import matplotlib.ticker as tck
 import numpy as np
 import pandas as pd
 import sys
@@ -59,6 +60,7 @@ vtheta_exact = -np.sin(theta)*prm.U_inf*(1+prm.R**2/r**2)
 erreur_vr = np.mean(abs(vr_exact - vr))
 erreur_vtheta = np.mean(abs(vtheta_exact - vtheta))
 
+
 cd, cl = coeff_aerodynamique(vr, vtheta, nr, ntheta, prm)
 
 V = np.sqrt(np.square(vr) + np.square(vtheta))
@@ -85,12 +87,12 @@ ax4.add_patch(circle1)
 # ax4.grid(True, which="both")
 bonds_r = 16
 bonds_theta = 2
-ax4.quiver(x[::bonds_theta,::bonds_r ], y[::bonds_theta , ::bonds_r], vx[::bonds_theta , ::bonds_r], vy[::bonds_theta , ::bonds_r], units = "dots", color = "red", scale = .006, label = "Vecteurs vitesse") 
+ax4.quiver(x[::bonds_theta,::bonds_r ], y[::bonds_theta , ::bonds_r], vx[::bonds_theta , ::bonds_r], vy[::bonds_theta , ::bonds_r], units = "dots", color = "red", scale = .005, label = "Vecteurs vitesse") 
 ax4.set_title("Champ de vitesse d'un fluide en écoulement autour\nd'un cylindre en régime permanent", size=12)
 ax4.set_xlabel(r'Position en $x$ [-]', size=13)
 ax4.set_ylabel(r'Position en $y$ [-]', size=13)
 ax4.axis([-5.1, 5.1, -5.1, 5.1])
-fig4.savefig("champ_de_vitesse.png", dpi=900)
+#fig4.savefig("champ_de_vitesse.png", dpi=900)
 #%%
 psi_num_mat = np.abs(k2ij_matrix(ntheta, psi_num))
 fig22, ax22 = plt.subplots(constrained_layout=False)
@@ -104,6 +106,22 @@ ax22.set_ylabel(r'Position en $y$ [-]', size=13)
 # ax22.grid(True, which="both")
 
 # fig22.savefig("ligne_courant.png", dpi=1200)
+
+
+
+#Graphique de Cp
+fig33, ax33 = plt.subplots(constrained_layout=False)
+cp = coeff_pression(vr[:,0], vtheta[:,0], prm)
+t = np.linspace(0,2,len(cp))
+plt.plot(t,cp,'r')
+plt.xlim(0,2)
+plt.grid(which='both')
+plt.title(r"Coefficient de pression $C_p$ en fonction de l'angle $\theta$ pour r = R")
+plt.xlabel(r"$\theta$ [rad]")
+plt.ylabel(r"$C_p$ [-]")
+ax33.xaxis.set_major_formatter(tck.FormatStrFormatter('%g $\pi$'))
+ax33.xaxis.set_major_locator(tck.MultipleLocator(base=0.5))
+# plt.savefig('C_p.png',dpi=1000)
 
 plt.show()
 
