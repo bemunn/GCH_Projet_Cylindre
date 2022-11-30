@@ -21,7 +21,7 @@ def ij2k(i,j, ntheta):
     return k
 
 def k2ij(k, ntheta):
-    """ Fonction convertissant le système à deux indices i,j en système un indice unique k
+    """ Fonction convertissant le système à un indice unique k en un sytème à deux indices i,j
 
     Entrées:
         - k : Indice unique indiquant la position dans le domaine étudié
@@ -38,7 +38,7 @@ def k2ij(k, ntheta):
     return i,j
 
 def k2ij_matrix(ntheta, vect):
-    """ Fonction convertissant le système à deux indices i,j en système un indice unique k
+    """ Fonction convertissant un vecteur indexé en k en matrice indexée en i,j
 
     Entrées:
         - k : Indice unique indiquant la position dans le domaine étudié
