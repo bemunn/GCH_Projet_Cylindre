@@ -68,12 +68,12 @@ for a,n in enumerate(nr):
     erreur_moy_cd[a] = np.mean(abs(cd_exact - cd))
     erreur_moy_cl[a] = np.mean(abs(cl_exact - cl))
 
-ordre_psi =abs(np.log10(erreur_moy_psi[-1])-np.log10(erreur_moy_psi[0]))/abs(np.log10(nr[-1])-np.log10(nr[0])) 
-ordre_vr =abs(np.log10(erreur_moy_vr[-1])-np.log10(erreur_moy_vr[0]))/abs(np.log10(nr[-1])-np.log10(nr[0]))
-ordre_vtheta =abs(np.log10(erreur_moy_vtheta[-1])-np.log10(erreur_moy_vtheta[0]))/abs(np.log10(nr[-1])-np.log10(nr[0])) 
-ordre_cp =abs(np.log10(erreur_moy_cp[-1])-np.log10(erreur_moy_cp[0]))/abs(np.log10(nr[-1])-np.log10(nr[0])) 
-ordre_cd =abs(np.log10(erreur_moy_cd[-1])-np.log10(erreur_moy_cd[0]))/abs(np.log10(nr[-1])-np.log10(nr[0])) 
-ordre_cl =abs(np.log10(erreur_moy_cl[-1])-np.log10(erreur_moy_cl[0]))/abs(np.log10(nr[-1])-np.log10(nr[0])) 
+ordre_psi =abs(np.log10(erreur_moy_psi[-1])-np.log10(erreur_moy_psi[-2]))/abs(np.log10(nr[-1])-np.log10(nr[-2])) 
+ordre_vr =abs(np.log10(erreur_moy_vr[-1])-np.log10(erreur_moy_vr[-2]))/abs(np.log10(nr[-1])-np.log10(nr[-2]))
+ordre_vtheta =abs(np.log10(erreur_moy_vtheta[-1])-np.log10(erreur_moy_vtheta[-2]))/abs(np.log10(nr[-1])-np.log10(nr[-2])) 
+ordre_cp =abs(np.log10(erreur_moy_cp[-1])-np.log10(erreur_moy_cp[-2]))/abs(np.log10(nr[-1])-np.log10(nr[-2]))
+ordre_cd =abs(np.log10(erreur_moy_cd[-1])-np.log10(erreur_moy_cd[-2]))/abs(np.log10(nr[-1])-np.log10(nr[-2])) 
+ordre_cl =abs(np.log10(erreur_moy_cl[-1])-np.log10(erreur_moy_cl[-2]))/abs(np.log10(nr[-1])-np.log10(nr[-2])) 
 
 
 #plot erreur psi
