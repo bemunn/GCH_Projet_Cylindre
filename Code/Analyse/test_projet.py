@@ -73,10 +73,11 @@ y = r* np.sin(theta)
 # fig, ax1 = plt.subplots(constrained_layout=True)
 
 # fig11 = ax1.pcolormesh(x,y, vx)
-
+# cbar =plt.colorbar(fig11, ax=ax1)
 
 # fig2, ax2 = plt.subplots(constrained_layout=True)
 # fig12 = ax2.pcolormesh(x,y, vy)
+# cbar =plt.colorbar(fig12, ax=ax2)
 
 
 circle1 = plt.Circle((0, 0), 1, color='white', fill=1)
@@ -85,14 +86,17 @@ fig4, ax4 = plt.subplots(constrained_layout=True)
 ax4.add_patch(circle2)
 ax4.add_patch(circle1)
 # ax4.grid(True, which="both")
-bonds_r = 16
-bonds_theta = 2
+bonds_r = 65
+bonds_theta = 20
 ax4.quiver(x[::bonds_theta,::bonds_r ], y[::bonds_theta , ::bonds_r], vx[::bonds_theta , ::bonds_r], vy[::bonds_theta , ::bonds_r], units = "dots", color = "red", scale = .005, label = "Vecteurs vitesse") 
 ax4.set_title("Champ de vitesse d'un fluide en écoulement autour\nd'un cylindre en régime permanent", size=12)
 ax4.set_xlabel(r'Position en $x$ [-]', size=13)
 ax4.set_ylabel(r'Position en $y$ [-]', size=13)
+for key, spine in ax4.spines.items():
+    spine.set_visible(False)
+ax4.axis('equal')
 ax4.axis([-5.1, 5.1, -5.1, 5.1])
-#fig4.savefig("champ_de_vitesse.png", dpi=900)
+fig4.savefig("champ_de_vitesse.png", dpi=900)
 #%%
 psi_num_mat = np.abs(k2ij_matrix(ntheta, psi_num))
 fig22, ax22 = plt.subplots(constrained_layout=False)
@@ -101,11 +105,12 @@ cbar =plt.colorbar(contour, ax=ax22)
 cbar.set_label(r'$\psi$ ', rotation=0, labelpad=10, size=12)
 for key, spine in ax22.spines.items():
     spine.set_visible(False)
+ax4.axis('equal')
 ax22.set_xlabel(r'Position en $x$ [-]', size=13)
 ax22.set_ylabel(r'Position en $y$ [-]', size=13)
 # ax22.grid(True, which="both")
 
-# fig22.savefig("ligne_courant.png", dpi=1200)
+fig22.savefig("ligne_courant.png", dpi=1200)
 
 
 
