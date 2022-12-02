@@ -41,7 +41,7 @@ class Test:
         assert(all(abs(np.asarray(x[0,:]) - np.array([-1,0,1])) < 1e-03))
         assert(all(abs(np.asarray(y[:,0]) - np.array([2,1.3333,0.6666,0])) < 1e-03))
 
-    def test_assemblage(self):
+    def test_mdf(self):
         nr = 51
         ntheta = 76
         r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)

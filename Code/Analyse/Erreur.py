@@ -32,7 +32,7 @@ prm = parametres()
 
 
 
-nr = np.arange(11,302,10)
+nr = np.arange(10,302,10)
 erreur_moy_psi = np.zeros(len(nr))
 erreur_moy_vr = np.zeros(len(nr))
 erreur_moy_vtheta = np.zeros(len(nr))
@@ -77,33 +77,42 @@ ordre_cl =abs(np.log10(erreur_moy_cl[-1])-np.log10(erreur_moy_cl[-2]))/abs(np.lo
 
 
 #plot erreur psi
-plt.loglog(nr,erreur_moy_psi,'-r')
-plt.title(r'Erreur sur la valeur de $\psi$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
+plt.loglog(nr,erreur_moy_psi,'-g')
+#ajout pente ordre 2
+plt.loglog(np.array([nr[0],nr[-1]]), np.array([erreur_moy_psi[-1]/(10 **(-abs(np.log10(nr[-1])-np.log10(nr[0])) * 2)) ,erreur_moy_psi[-1]]), '--r')
+plt.legend([r'$|\psi_{th} - \psi_{num}|$', "Pente d'ordre 2"])
+plt.title(r'Erreur moyenne de $\psi$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
 plt.xlabel(r'$N = n_r = n_{\theta}$')
-plt.ylabel(r'$|\psi_{th} - \psi_{num}|$')
+plt.ylabel('Erreur moyenne')
+plt.xlim(nr[0],nr[-1])  # Fixer les limites en x
 plt.grid(which='both')
 plt.savefig('ErreurPsiNrNtheta.png', dpi= 1000)
 plt.show()
 
 #plot erreur v_r et v_t
-plt.loglog(nr,erreur_moy_vr,'-b')
-plt.loglog(nr,erreur_moy_vtheta,'-g')
-plt.title(r'Erreur sur la valeur de $v_r$ et $v_{\theta}$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
+plt.loglog(nr,erreur_moy_vr,'-g')
+plt.loglog(np.array([nr[0],nr[-1]]), np.array([erreur_moy_vr[-1]/(10 **(-abs(np.log10(nr[-1])-np.log10(nr[0])) * 2)) ,erreur_moy_vr[-1]]), '--r')
+plt.loglog(nr,erreur_moy_vtheta,'-b')
+plt.loglog(np.array([nr[0],nr[-1]]), np.array([erreur_moy_vtheta[-1]/(10 **(-abs(np.log10(nr[-1])-np.log10(nr[0])) * 2)) ,erreur_moy_vtheta[-1]]), '--', color = 'orange')
+plt.title(r'Erreurs moyennes de $v_r$ et $v_{\theta}$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
 plt.xlabel(r'$N = n_r = n_{\theta}$')
-plt.legend([r'$|v_{r-th} - v_{r-num}|$', r'$|v_{\theta-th} - v_{\theta-num}|$'])
-plt.ylabel('Erreur')
+plt.legend([r'$|v_{r-th} - v_{r-num}|$', "Pente d'ordre 2", r'$|v_{\theta-th} - v_{\theta-num}|$', "Pente d'ordre 2"])
+plt.ylabel('Erreur moyenne')
+plt.xlim(nr[0],nr[-1])  # Fixer les limites en x
 plt.grid(which='both')
 plt.savefig('ErreurVitessesNrNtheta.png', dpi= 1000)
 plt.show()
 
 #plot erreur c_p, c_d et c_l
-plt.loglog(nr,erreur_moy_cp,'-b')
-plt.loglog(nr,erreur_moy_cd,'-g')
-plt.loglog(nr,erreur_moy_cd,'-r')
-plt.title(r'Erreur sur la valeur de $c_p$, $c_d$ et $c_l$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
+plt.loglog(nr,erreur_moy_cp,'-g')
+plt.loglog(np.array([nr[0],nr[-1]]), np.array([erreur_moy_cp[-1]/(10 **(-abs(np.log10(nr[-1])-np.log10(nr[0])) * 2)) ,erreur_moy_cp[-1]]), '--r')
+plt.loglog(nr,erreur_moy_cd,'-b')
+plt.loglog(nr,erreur_moy_cl,'-', color = 'purple')
+plt.title(r'Erreurs moyennes de $C_p$, $C_d$ et $C_l$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
 plt.xlabel(r'$N = n_r = n_{\theta}$')
-plt.legend([r'$|c_{p-th} - c_{p-num}|$', r'$|c_{d-th} - c_{d-num}|$',r'$|c_{l-th} - c_{l-num}|$'])
+plt.legend([r'$|c_{p-th} - c_{p-num}|$', "Pente d'ordre 2", r'$|c_{d-th} - c_{d-num}|$',r'$|c_{l-th} - c_{l-num}|$'])
 plt.ylabel('Erreur')
+plt.xlim(nr[0],nr[-1])  # Fixer les limites en x
 plt.grid(which='both')
 plt.savefig('ErreurCoeffAeroNrNtheta.png', dpi= 1000)
 plt.show()
