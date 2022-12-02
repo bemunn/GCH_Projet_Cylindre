@@ -83,7 +83,7 @@ plt.loglog(np.array([nr[0],nr[-1]]), np.array([erreur_moy_psi[-1]/(10 **(-abs(np
 plt.legend([r'$|\psi_{th} - \psi_{num}|$', "Pente d'ordre 2"])
 plt.title(r'Erreur moyenne de $\psi$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
 plt.xlabel(r'$N = n_r = n_{\theta}$')
-plt.ylabel('Erreur moyenne')
+plt.ylabel('Erreur')
 plt.xlim(nr[0],nr[-1])  # Fixer les limites en x
 plt.grid(which='both')
 plt.savefig('ErreurPsiNrNtheta.png', dpi= 1000)
@@ -97,20 +97,31 @@ plt.loglog(np.array([nr[0],nr[-1]]), np.array([erreur_moy_vtheta[-1]/(10 **(-abs
 plt.title(r'Erreurs moyennes de $v_r$ et $v_{\theta}$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
 plt.xlabel(r'$N = n_r = n_{\theta}$')
 plt.legend([r'$|v_{r-th} - v_{r-num}|$', "Pente d'ordre 2", r'$|v_{\theta-th} - v_{\theta-num}|$', "Pente d'ordre 2"])
-plt.ylabel('Erreur moyenne')
+plt.ylabel('Erreur')
 plt.xlim(nr[0],nr[-1])  # Fixer les limites en x
 plt.grid(which='both')
 plt.savefig('ErreurVitessesNrNtheta.png', dpi= 1000)
 plt.show()
 
-#plot erreur c_p, c_d et c_l
+#plot erreur c_p
 plt.loglog(nr,erreur_moy_cp,'-g')
 plt.loglog(np.array([nr[0],nr[-1]]), np.array([erreur_moy_cp[-1]/(10 **(-abs(np.log10(nr[-1])-np.log10(nr[0])) * 2)) ,erreur_moy_cp[-1]]), '--r')
-plt.loglog(nr,erreur_moy_cd,'-b')
-plt.loglog(nr,erreur_moy_cl,'-', color = 'purple')
-plt.title(r'Erreurs moyennes de $C_p$, $C_d$ et $C_l$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
+
+plt.title(r'Erreurs moyennes de $C_p$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
 plt.xlabel(r'$N = n_r = n_{\theta}$')
-plt.legend([r'$|c_{p-th} - c_{p-num}|$', "Pente d'ordre 2", r'$|c_{d-th} - c_{d-num}|$',r'$|c_{l-th} - c_{l-num}|$'])
+plt.legend([r'$|c_{p-th} - c_{p-num}|$', "Pente d'ordre 2"])
+plt.ylabel('Erreur')
+plt.xlim(nr[0],nr[-1])  # Fixer les limites en x
+plt.grid(which='both')
+plt.savefig('ErreurCoeffPressNrNtheta.png', dpi= 1000)
+plt.show()
+
+#plot erreur c_d et c_l
+plt.loglog(nr,erreur_moy_cd,'-g')
+plt.loglog(nr,erreur_moy_cl,'-r')
+plt.title(r'Erreurs moyennes de $C_d$ et $C_l$ selon le nombre de points ($n_r$ = $n_{\theta}$)')
+plt.xlabel(r'$N = n_r = n_{\theta}$')
+plt.legend([r'$|c_{d-th} - c_{d-num}|$',r'$|c_{l-th} - c_{l-num}|$'])
 plt.ylabel('Erreur')
 plt.xlim(nr[0],nr[-1])  # Fixer les limites en x
 plt.grid(which='both')
