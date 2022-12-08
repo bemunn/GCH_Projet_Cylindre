@@ -116,17 +116,20 @@ fig22.savefig("ligne_courant.png", dpi=1200)
 
 #Graphique de Cp
 fig33, ax33 = plt.subplots(constrained_layout=False)
-cp = coeff_pression(vr[:,0], vtheta[:,0], prm)
-t = np.linspace(0,2,len(cp))
-plt.plot(t,cp,'r')
+cp_num = coeff_pression(vr[:,0], vtheta[:,0], prm)
+cp_exact = 1 -4*np.sin(theta[:,0])**2
+t = np.linspace(0,2,len(cp_num))
+plt.plot(t,cp_num,'-g')
+plt.plot(t,cp_exact,'--r')
 plt.xlim(0,2)
 plt.grid(which='both')
 plt.title(r"Coefficient de pression $C_p$ en fonction de l'angle $\theta$ pour r = R")
 plt.xlabel(r"$\theta$ [rad]")
 plt.ylabel(r"$C_p$ [-]")
+plt.legend([r'$Cp_{num}$',r'$Cp_{th}$'])
 ax33.xaxis.set_major_formatter(tck.FormatStrFormatter('%g $\pi$'))
 ax33.xaxis.set_major_locator(tck.MultipleLocator(base=0.5))
-# plt.savefig('C_p.png',dpi=1000)
+plt.savefig('C_p.png',dpi=1000)
 
 plt.show()
 

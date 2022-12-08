@@ -29,19 +29,8 @@ prm = parametres()
 
 class Test:
 
-    def test_positions(self):
-            
-        X = [-1,1]
-        Y = [0,2]
-        nx = 3
-        ny = 4
-        x,y = position(X,Y,nx,ny)
-        assert(np.asarray(x).shape == (ny,nx))
-        assert(np.asarray(y).shape == (ny,nx))
-        assert(all(abs(np.asarray(x[0,:]) - np.array([-1,0,1])) < 1e-03))
-        assert(all(abs(np.asarray(y[:,0]) - np.array([2,1.3333,0.6666,0])) < 1e-03))
 
-    def test_assemblage(self):
+    def test_mdf(self):
         nr = 51
         ntheta = 76
         r,theta = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
@@ -127,20 +116,7 @@ class Test:
         assert(len(cp) == ntheta)
         for i in range(0,ntheta):
             assert(all(abs(cp - cp_exact) < 1e-03))
-   
-    def test_trapeze(self):
-        v1 = np.array([0,2,4,5,6,10])
-        v2 = np.array([0,1,3,7,15,18,20])
-        t1 = np.linspace(0,(len(v1)-1)*2,len(v1))
-        t2 = np.linspace(0,(len(v2)-1)*3,len(v2))
-        pos1 = np.array([0,2,8,17,28,44])
-        pos2 = np.array([0.,1.5,7.5,22.5,55.5,105.,162.])
-        
-        rep_trapeze1 = trapeze(t1,v1)
-        rep_trapeze2 = trapeze(t2,v2)
-        
-        assert(abs(rep_trapeze1 - pos1[-1]) < 1e-02)
-        assert(abs(rep_trapeze2 - pos2[-1]) < 1e-02)          
+            
    
     def test_coeff_aerodynamique(self):
         nr = 411
