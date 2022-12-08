@@ -33,7 +33,7 @@ def k2ij(k, ntheta):
     """
 
     j = np.mod(k, ntheta)
-    i = int(( k - j ) / ntheta)
+    i = int(( k - j ) / ntheta)       # on veut que i et j soient des integers et non des floats pour indexer
 
     return i,j
 
@@ -48,14 +48,14 @@ def k2ij_matrix(ntheta, vect):
     Sorties:
         - mat : Matrice indexé en [i,j] tel que k = ny * i + j
     """
-    k_max = len(vect) - 1
-    i_max, j_max = k2ij(k_max, ntheta)
+    k_max = len(vect) - 1             # correspond à l'index du dernier element du vecteur
+    i_max, j_max = k2ij(k_max, ntheta) 
 
-    mat = np.zeros([j_max+1,i_max+1])
+    mat = np.zeros([j_max+1,i_max+1]) # creation matrice aux dimensions adequates
 
-    for k in range(len(vect)):
+    for k in range(len(vect)):        # on place tous les elements du vecteur a l'endroit associé dans la matrice
         i, j  = k2ij(k, ntheta)
-        mat[-j-1, i] = vect[k]
+        mat[-j-1, i] = vect[k] 
 
     return mat
 
@@ -83,12 +83,12 @@ def position(X,Y,nx,ny):
                     [0    0    0  ]
     """
 
-    x_ligne = np.linspace(X[0], X[1], nx)
-    x = np.tile(x_ligne, [ny,1])
+    x_ligne = np.linspace(X[0], X[1], nx)        # vecteur positions x
+    x = np.tile(x_ligne, [ny,1])                 # on copie le vecteur y fois
     
-    y_ligne = np.linspace(Y[1], Y[0], ny)
-    y_colonne = y_ligne.reshape(len(y_ligne), 1)
-    y = np.tile(y_colonne, [1,nx])
+    y_ligne = np.linspace(Y[1], Y[0], ny)        # vecteur positions y
+    y_colonne = y_ligne.reshape(len(y_ligne), 1) # vecteur vertical
+    y = np.tile(y_colonne, [1,nx])               # on copie le vecteur x fois
 
     return x, y
 
@@ -117,11 +117,11 @@ def mdf(nr,ntheta, prm):
     dr = abs(r[-1,-1] - r[-1,-2])
     dtheta = abs(theta[-1,-1] - theta[-2,-1])
 
-    A = lil_matrix((N,N)) 
+    A = lil_matrix((N,N))               # matrice creuse
     # A = np.zeros([N,N])
     b = np.zeros(N)
 
-    ## Fonction 
+    ## Fonction discrétisée à l'intérieur du domaine étudié
     for i in range(1,nr-1):
         for j in range(1,ntheta-1):
             k = ij2k(i,j, ntheta)
@@ -164,13 +164,12 @@ def mdf(nr,ntheta, prm):
         b[k]   = prm.U_inf * prm.R_ext * (1 - prm.R**2 / prm.R_ext**2) * np.sin(theta[-1-j,i])
     
     A = lil_matrix.tocsr(A)
-    psi = spsolve(A,b)
-    # psi = np.linalg.solve(A,b)
+    psi = spsolve(A,b)                  # Résolution du système linéaire
 
     return psi
 
 def vitesse_polaire(psi,nr,ntheta, prm ):
-    """ Fonction assemblant la matrice A et le vecteur b
+    """ Fonction calculant les vitesses en tout point en coordonnées polaires
 
     Entrées:
         - psi : Vecteur (array) de taille N contenant les valeurs de phi à chaque point
@@ -194,33 +193,39 @@ def vitesse_polaire(psi,nr,ntheta, prm ):
     dr = abs(r[-1,-1] - r[-1,-2])
     dtheta = abs(theta[-1,-1] - theta[-2,-1])
 
-    #v_r
+    # Fonctions discrétisées pour vr
     
     for i in range(nr):
+        # Condition limite en bas
         j = 0
         k = ij2k(i,j, ntheta)
         v_r[-j-1, i] = (1 / r[-j-1, i]) * (-psi[k+2] + 4 * psi[k+1] - 3 * psi[k]) / (2 * dtheta)
 
+        # Condition limite en haut
         j = ntheta - 1
         k = ij2k(i,j, ntheta)
         v_r[-j-1, i] = (1 / r[-j-1, i]) * (psi[k-2] - 4 * psi[k-1] + 3 * psi[k]) / (2 * dtheta)
 
+        # Condition milieu
         for j in range(1, ntheta - 1):
             k = ij2k(i,j, ntheta)
             v_r[-j-1, i] = (1 / r[-j-1, i]) * (psi[k+1] - psi[k-1]) / (2 * dtheta)
 
 
-    #v_theta
+    # Fonctions discrétisées pour vtheta
     
     for j in range(ntheta):
+        # Condition limite à gauche
         i=0
         k = ij2k(i,j, ntheta)
         v_theta[-j-1, i] = - (-psi[k+2*ntheta] + 4 * psi[k+ntheta] - 3 * psi[k]) / (2 * dr)
 
+        # Condition limite à droite
         i = nr - 1
         k = ij2k(i,j, ntheta)
         v_theta[-j-1, i] = - (psi[k-2*ntheta] - 4 * psi[k-ntheta] + 3 * psi[k]) / (2 * dr)
 
+        # Condition milieu
         for i in range(1, nr - 1):
             k = ij2k(i,j, ntheta)
             v_theta[-j-1, i] = - (psi[k+ntheta] - psi[k-ntheta]) / (2 * dr)
@@ -229,8 +234,7 @@ def vitesse_polaire(psi,nr,ntheta, prm ):
 
 
 def polaire2xy(v_r, v_theta, nr,ntheta, prm):
-    """ Fonction assemblant la matrice A et le vecteur b
-
+    """ Fonction convertissant les vitesses en coordonnées polaires en vitesses en coordonnées cartésiennes
     Entrées:
         - v_r : Matrice (array) nr x ntheta contenant la vitesse selon l'axe r à chaque point [-]
         - v_theta : Matrice (array) nr x ntheta contenant la vitesse selon l'axe theta à chaque point [-]
@@ -251,27 +255,30 @@ def polaire2xy(v_r, v_theta, nr,ntheta, prm):
     v_x = np.zeros([ntheta, nr])
     v_y = np.zeros([ntheta, nr])
 
+    # Utilisation de la matrice de rotation
     for i in range(nr):
         for j in range(ntheta):
                 v_x[-j-1, i], v_y[-1-j, i] = np.matmul([[np.cos(theta[-1-j,i]),-np.sin(theta[-1-j,i])],[np.sin(theta[-1-j,i]),np.cos(theta[-1-j,i])]], [v_r[-j-1, i],v_theta[-j-1,i] ])
 
     return v_x, v_y
 
-def coeff_pression(v_r, v_theta, prm):
+def coeff_pression(vr_vect, vtheta_vect, prm):
     """ Fonction calculant le coefficient de pression Cp à partir des vecteurs vitesses
 
     Entrées:
-        - v_r : Vecteur (array) ntheta contenant la vitesse selon l'axe r à chaque theta à r = R [-]
-        - v_theta : Vecteur (array) ntheta contenant la vitesse selon l'axe theta à chaque theta à r = R [-]
+        - vr_vect : Vecteur (array) de taille ntheta contenant la vitesse selon l'axe r à chaque theta à r = R [-]
+        - vtheta_vect : Vecteur (array) de taille ntheta contenant la vitesse selon l'axe theta à chaque theta à r = R [-]
         - prm : Objet class parametres()
             - U_inf : Vitesse du fluide éloigné du cylindre [-]
             - R : Rayon interne du cylindre creux [-]
             - R_ext : Rayon externe du cylindre creux [-]
 
     Sorties (dans l'ordre énuméré ci-bas):
-        - cp : Vecteur (array) ntheta contenant la vitesse selon l'axe x à chaque point [-]
+        - cp : Vecteur (array) de taille ntheta contenant c_p à chaque theta à r = R [-]
     """
-    V = np.sqrt(v_r**2 + v_theta**2)
+    
+    V = np.sqrt(vr_vect**2 + vtheta_vect**2) # Norme de la vitesse
+
     cp = 1 - (V/prm.U_inf)**2
     
     return cp
@@ -284,15 +291,14 @@ def trapeze(x,y):
         - y : Valeurs de l'ordonnée, vecteur (array)
 
     Sortie:
-        - Valeur de l'intégrale calculée (float)
+        - S : Valeur de l'intégrale calculée (float)
     """
 
-    # Fonction à écrire
-    S = 0
+    S = 0       # Initialisation somme
     for i in range(int(len(x)) - 1):
-        S = S + 0.5 * (y[i] + y[i+1]) * (x[i+1] - x[i])
+        S = S + 0.5 * (y[i] + y[i+1]) * (x[i+1] - x[i]) 
 
-    return S # à compléter
+    return S
 
 def coeff_aerodynamique(v_r, v_theta, nr, ntheta, prm):
     """Fonction qui calcule le coefficient de trainée et de portance avec les vitesses
@@ -308,8 +314,8 @@ def coeff_aerodynamique(v_r, v_theta, nr, ntheta, prm):
             - R_ext : Rayon externe du cylindre creux [-]
 
     Sortie:
-        - cd : Valeur (double) du coefficient de trainée [-]
-        - cl : Valeur (double) du coefficient de portance [-]
+        - cd : Valeur (float) du coefficient de trainée [-]
+        - cl : Valeur (float) du coefficient de portance [-]
     """ 
     r,theta_mat = position([prm.R, prm.R_ext],[0. , 2 * np.pi],nr,ntheta)
     
