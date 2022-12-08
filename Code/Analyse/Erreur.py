@@ -36,12 +36,12 @@ N = np.arange(10,302,10)
 
 #Initialisation des vecteurs d'erreur
 
-erreur_moy_psi = np.zeros(len(nr))
-erreur_moy_vr = np.zeros(len(nr))
-erreur_moy_vtheta = np.zeros(len(nr))
-erreur_moy_cp = np.zeros(len(nr))
-erreur_moy_cd = np.zeros(len(nr))
-erreur_moy_cl = np.zeros(len(nr))
+erreur_moy_psi = np.zeros(len(N))
+erreur_moy_vr = np.zeros(len(N))
+erreur_moy_vtheta = np.zeros(len(N))
+erreur_moy_cp = np.zeros(len(N))
+erreur_moy_cd = np.zeros(len(N))
+erreur_moy_cl = np.zeros(len(N))
 
 
 
